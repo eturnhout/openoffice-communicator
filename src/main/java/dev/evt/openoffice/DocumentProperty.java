@@ -1,8 +1,8 @@
 package dev.evt.openoffice;
 
 /**
- * A document's property 
- *
+ * A document's property
+ * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
@@ -10,12 +10,14 @@ public class DocumentProperty
 {
     protected String name;
     protected String value;
-    
+
     /**
      * Constructs a DocumentProperty object
-     *
-     * @param name The name of the property
-     * @param value The value of the property
+     * 
+     * @param name
+     *            The name of the property
+     * @param value
+     *            The value of the property
      */
     public DocumentProperty(String name, String value)
     {

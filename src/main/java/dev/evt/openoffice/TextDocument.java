@@ -14,6 +14,12 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
+/**
+ * Used to interact with text documents.
+ * 
+ * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
+ * @version 1.0
+ */
 public class TextDocument extends Desktop
 {
     final static String NEW_DOCUMENT = "private:factory/swriter";
@@ -22,8 +28,9 @@ public class TextDocument extends Desktop
     protected String fileName;
     protected String fileExtension;
     protected XTextDocument document;
-    
-    public TextDocument(Connection connection, String folder, String fileName, String fileExtension) throws IOException, IllegalArgumentException
+
+    public TextDocument(Connection connection, String folder, String fileName, String fileExtension)
+            throws IOException, IllegalArgumentException
     {
         super(connection);
         this.setFolder(folder);
@@ -35,7 +42,8 @@ public class TextDocument extends Desktop
     /**
      * Set the folder location of the document
      * 
-     * @param folder The location of the document
+     * @param folder
+     *            The location of the document
      */
     public void setFolder(String folder)
     {
@@ -55,7 +63,8 @@ public class TextDocument extends Desktop
     /**
      * Set the document's name
      * 
-     * @param fileName Name of the document
+     * @param fileName
+     *            Name of the document
      */
     public void setFileName(String fileName)
     {
@@ -73,9 +82,11 @@ public class TextDocument extends Desktop
     }
 
     /**
-     * The document's extension. This is useful when saving the document in another format.
+     * The document's extension. This is useful when saving the document in
+     * another format.
      * 
-     * @param fileExtension The document's extension
+     * @param fileExtension
+     *            The document's extension
      */
     public void setFileExtension(String fileExtension)
     {
@@ -90,11 +101,11 @@ public class TextDocument extends Desktop
     public String getFileExtension()
     {
         return this.fileExtension;
-    }    
-    
+    }
+
     /**
      * Get the documents text
-     *
+     * 
      * @return the documents text in String format
      */
     public String getText()
@@ -102,10 +113,10 @@ public class TextDocument extends Desktop
         XText text = this.document.getText();
         return text.getString();
     }
-    
-    
+
     /**
-     * Get the XTextDocument object. This can be used to interact with the document.
+     * Get the XTextDocument object. This can be used to interact with the
+     * document.
      * 
      * @return the XTextDocument object for this document
      */
@@ -115,7 +126,8 @@ public class TextDocument extends Desktop
     }
 
     /**
-     * Initialize this object. This will fill in the XTextDocument object with a new or existing file if it already exists
+     * Initialize this object. This will fill in the XTextDocument object with a
+     * new or existing file if it already exists
      *
      * @throws IOException
      * @throws IllegalArgumentException
@@ -130,7 +142,7 @@ public class TextDocument extends Desktop
 
         PropertyValue[] lProperties = new PropertyValue[1];
         lProperties[0] = new com.sun.star.beans.PropertyValue();
-        lProperties[0].Name  = "Hidden";
+        lProperties[0].Name = "Hidden";
         lProperties[0].Value = true;
         XComponent xComponent = this.componentLoader.loadComponentFromURL(path, "_blank", 0, lProperties);
 

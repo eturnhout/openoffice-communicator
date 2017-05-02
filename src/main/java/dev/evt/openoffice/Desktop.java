@@ -6,7 +6,7 @@ import com.sun.star.uno.UnoRuntime;
 
 /**
  * Can be used to interact/create different documents
- *
+ * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
@@ -16,8 +16,9 @@ public class Desktop extends BaseConnection
 
     /**
      * Construct a Desktop object
-     *
-     * @param connection The connection a running OpenOffice service
+     * 
+     * @param connection
+     *            The connection a running OpenOffice service
      */
     public Desktop(Connection connection)
     {
@@ -27,7 +28,7 @@ public class Desktop extends BaseConnection
 
     /**
      * Get the XComponentLoader. This can be used to create/open documents
-     *
+     * 
      * @return XComponentLoader
      */
     public XComponentLoader getComponentLoader()
@@ -48,6 +49,6 @@ public class Desktop extends BaseConnection
             e.printStackTrace();
         }
 
-        this.componentLoader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+        this.componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
     }
 }

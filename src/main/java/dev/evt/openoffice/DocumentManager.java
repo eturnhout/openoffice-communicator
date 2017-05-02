@@ -16,7 +16,7 @@ import com.sun.star.util.XCloseable;
 
 /**
  * Manager that handles document storage
- *
+ * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
@@ -33,8 +33,10 @@ public class DocumentManager extends BaseConnection
     /**
      * Constructs a DocumentManager object
      * 
-     * @param connection The connection to a running OpenOffice service
-     * @param folder The storage folder on the filesystem for the documents
+     * @param connection
+     *            The connection to a running OpenOffice service
+     * @param folder
+     *            The storage folder on the filesystem for the documents
      * @throws Exception
      */
     public DocumentManager(Connection connection, String folder) throws Exception
@@ -51,14 +53,15 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Set the location where the documents will be handled
-     *
+     * 
      * @param folder
+     *            Full system path to the folder
      */
     public void setFolder(String folder)
     {
         this.folder = folder;
     }
-    
+
     /**
      * Set the location where the documents will be handled
      * 
@@ -68,18 +71,22 @@ public class DocumentManager extends BaseConnection
     {
         return this.folder;
     }
-    
+
     /**
      * Creates the file from a input stream
      * 
-     * @param fileName the file's name plus extension
-     * @param fileExtension the file's extension
-     * @param inputStream the input stream 
+     * @param fileName
+     *            The file's name plus extension
+     * @param fileExtension
+     *            The file's extension
+     * @param inputStream
+     *            The input stream
      * @throws CommandAbortedException
      * @throws Exception
      * @throws java.io.IOException
      */
-    public void createFromInputStream(String fileName, String fileExtension, InputStream inputStream) throws CommandAbortedException, Exception, java.io.IOException
+    public void createFromInputStream(String fileName, String fileExtension, InputStream inputStream)
+            throws CommandAbortedException, Exception, java.io.IOException
     {
         if (this.exists(fileName, fileExtension)) {
             throw new Exception("There's already a file called " + fileName + fileExtension + ".");
@@ -98,7 +105,7 @@ public class DocumentManager extends BaseConnection
         }
 
         System.out.println("Read: " + amount + " bytes");
-        
+
         outputStream.flush();
         outputStream.closeOutput();
         inputStream.close();
@@ -106,8 +113,10 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Get the document's raw content as a string. Handy for html documents.
-     *
-     * @param document The TextDocument from which to get the content. This document must be stored and available on the filesystem.
+     * 
+     * @param document
+     *            The TextDocument from which to get the content. This document
+     *            must be stored and available on the filesystem.
      * @return the document's content in string format
      * @throws CommandAbortedException
      * @throws Exception
@@ -133,13 +142,14 @@ public class DocumentManager extends BaseConnection
 
         return buffer.toString();
     }
-    
-    
+
     /**
      * Open an existing document
      * 
-     * @param fileName The document's name
-     * @param fileExtension The document's extension
+     * @param fileName
+     *            The document's name
+     * @param fileExtension
+     *            The document's extension
      * @return a TextDocument object
      * @throws CommandAbortedException
      * @throws Exception
@@ -147,7 +157,8 @@ public class DocumentManager extends BaseConnection
     public TextDocument open(String fileName, String fileExtension) throws CommandAbortedException, Exception
     {
         if (!AVAILABLE_EXTENSIONS.contains(fileExtension)) {
-            throw new Exception("Unsupported file extension \"" + fileExtension + "\", does not match any of the following available extensions: " + AVAILABLE_EXTENSIONS + ".");
+            throw new Exception("Unsupported file extension \"" + fileExtension
+                    + "\", does not match any of the following available extensions: " + AVAILABLE_EXTENSIONS + ".");
         }
 
         if (!this.exists(fileName, fileExtension)) {
@@ -160,8 +171,10 @@ public class DocumentManager extends BaseConnection
     /**
      * Saves a document
      * 
-     * @param document The TextDocument object than needs saving
-     * @param properties Properties that determine how the document will be saved 
+     * @param document
+     *            The TextDocument object than needs saving
+     * @param properties
+     *            Properties that determine how the document will be saved
      * @throws IOException
      */
     public void save(TextDocument document, DocumentProperties properties) throws IOException
@@ -185,11 +198,12 @@ public class DocumentManager extends BaseConnection
 
         storeable.storeAsURL(fullPath, options);
     }
-    
+
     /**
      * Delete a document
      * 
-     * @param document The document that needs deleting
+     * @param document
+     *            The document that needs deleting
      * @throws CommandAbortedException
      * @throws Exception
      */
@@ -201,9 +215,11 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Check if a file already exists
-     *
-     * @param fileName Name of the file
-     * @param fileExtension The file's extension
+     * 
+     * @param fileName
+     *            Name of the file
+     * @param fileExtension
+     *            The file's extension
      * @return true if the file exists, returns false otherwise
      * @throws CommandAbortedException
      * @throws Exception
@@ -220,8 +236,10 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
+     * Closes the document
      * 
-     * @param document The TextDocument object that needs closing
+     * @param document
+     *            The TextDocument object that needs closing
      * @throws CloseVetoException
      */
     public void close(TextDocument document) throws CloseVetoException
@@ -232,7 +250,7 @@ public class DocumentManager extends BaseConnection
         if (closeable != null) {
             closeable.close(false);
         } else {
-            XComponent component = (XComponent)UnoRuntime.queryInterface(XComponent.class, storeable);
+            XComponent component = (XComponent) UnoRuntime.queryInterface(XComponent.class, storeable);
             component.dispose();
         }
     }
