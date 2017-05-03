@@ -104,8 +104,6 @@ public class DocumentManager extends BaseConnection
             outputStream.writeBytes(bytes);
         }
 
-        System.out.println("Read: " + amount + " bytes");
-
         outputStream.flush();
         outputStream.closeOutput();
         inputStream.close();
