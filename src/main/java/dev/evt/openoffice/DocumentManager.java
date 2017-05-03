@@ -1,6 +1,7 @@
 package dev.evt.openoffice;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XStorable;
@@ -118,8 +119,9 @@ public class DocumentManager extends BaseConnection
      * @return the document's content in string format
      * @throws CommandAbortedException
      * @throws Exception
+     * @throws UnsupportedEncodingException 
      */
-    public String getRawContent(TextDocument document) throws CommandAbortedException, Exception
+    public String getRawContent(TextDocument document) throws CommandAbortedException, Exception, UnsupportedEncodingException
     {
         if (!this.exists(document.getFileName(), document.getFileExtension())) {
             throw new Exception("No file called " + document.getFileName() + document.getFileExtension() + " found.");
@@ -133,7 +135,7 @@ public class DocumentManager extends BaseConnection
         int read = 0;
 
         while ((read = inputStream.readSomeBytes(bytes, 1024)) != 0) {
-            buffer.append(new String(bytes[0]));
+            buffer.append(new String(bytes[0], "UTF-8"));
         }
 
         inputStream.closeInput();
