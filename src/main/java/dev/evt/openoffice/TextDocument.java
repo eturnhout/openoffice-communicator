@@ -1,17 +1,11 @@
 package dev.evt.openoffice;
 
-import java.io.BufferedReader;
-import java.io.Reader;
-import java.util.Scanner;
-
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.io.IOException;
-import com.sun.star.io.XInputStream;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
 /**
