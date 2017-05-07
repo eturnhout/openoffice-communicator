@@ -9,92 +9,24 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 
 /**
+ * <h1>TextDocument</h1>
+ * <p>
  * Used to interact with text documents.
+ * </p>
  * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
-public class TextDocument extends Desktop
+public class TextDocument extends BaseDocument
 {
     final static String NEW_DOCUMENT = "private:factory/swriter";
 
-    protected String folder;
-    protected String fileName;
-    protected String fileExtension;
     protected XTextDocument document;
 
-    public TextDocument(Connection connection, String folder, String fileName, String fileExtension)
-            throws IOException, IllegalArgumentException
+    public TextDocument(Connection connection, String folder, String file) throws IOException, IllegalArgumentException
     {
-        super(connection);
-        this.setFolder(folder);
-        this.setFileName(fileName);
-        this.setFileExtension(fileExtension);
+        super(connection, folder, file);
         this.initialize();
-    }
-
-    /**
-     * Set the folder location of the document
-     * 
-     * @param folder
-     *            The location of the document
-     */
-    public void setFolder(String folder)
-    {
-        this.folder = folder;
-    }
-
-    /**
-     * Get the folder location of the document
-     * 
-     * @return The location of the document
-     */
-    public String getFolder()
-    {
-        return this.folder;
-    }
-
-    /**
-     * Set the document's name
-     * 
-     * @param fileName
-     *            Name of the document
-     */
-    public void setFileName(String fileName)
-    {
-        this.fileName = fileName;
-    }
-
-    /**
-     * Get the document's name.
-     * 
-     * @return the document's name
-     */
-    public String getFileName()
-    {
-        return this.fileName;
-    }
-
-    /**
-     * The document's extension. This is useful when saving the document in
-     * another format.
-     * 
-     * @param fileExtension
-     *            The document's extension
-     */
-    public void setFileExtension(String fileExtension)
-    {
-        this.fileExtension = fileExtension;
-    }
-
-    /**
-     * Get the document's extension.
-     * 
-     * @return the document's extension
-     */
-    public String getFileExtension()
-    {
-        return this.fileExtension;
     }
 
     /**
@@ -130,8 +62,8 @@ public class TextDocument extends Desktop
     {
         String path = TextDocument.NEW_DOCUMENT;
 
-        if (this.fileName != null) {
-            path = "file://" + this.folder + this.fileName + this.fileExtension;
+        if (this.name != null) {
+            path = "file://" + this.folder + this.name + this.extension;
         }
 
         PropertyValue[] lProperties = new PropertyValue[1];

@@ -9,7 +9,7 @@ package dev.evt.openoffice;
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
-public class BaseDocument extends Desktop
+public class BaseDocument extends BaseConnection
 {
     /**
      * Full path to the directory of the document
@@ -40,7 +40,9 @@ public class BaseDocument extends Desktop
     {
         super(connection);
         this.setFolder(folder);
-        this.parseFile(file);
+        if (file != null) {
+            this.parseFile(file);
+        }
     }
 
     /**

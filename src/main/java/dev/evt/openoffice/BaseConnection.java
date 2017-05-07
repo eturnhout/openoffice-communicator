@@ -1,5 +1,9 @@
 package dev.evt.openoffice;
 
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.UnoRuntime;
+
 /**
  * Sets and makes the connection available for use in other classes when
  * extending
@@ -10,6 +14,7 @@ package dev.evt.openoffice;
 public class BaseConnection
 {
     protected Connection connection;
+    protected XComponentLoader componentLoader;
 
     /**
      * Constructs a BaseConnection object
@@ -20,6 +25,7 @@ public class BaseConnection
     public BaseConnection(Connection connection)
     {
         this.setConnection(connection);
+        this.initializeComponentLoader();
     }
 
     /**
@@ -43,5 +49,31 @@ public class BaseConnection
     public Connection getConnection()
     {
         return this.connection;
+    }
+
+    /**
+     * Get the XComponentLoader. This can be used to create/open documents
+     * 
+     * @return XComponentLoader
+     */
+    public XComponentLoader getComponentLoader()
+    {
+        return this.componentLoader;
+    }
+
+    /**
+     * Initializes the Desktop object
+     */
+    private void initializeComponentLoader()
+    {
+        Object desktop = null;
+
+        try {
+            desktop = this.connection.getServiceFactory().createInstance("com.sun.star.frame.Desktop");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
     }
 }

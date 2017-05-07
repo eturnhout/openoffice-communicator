@@ -31,6 +31,17 @@ public class BaseDocumentTest
     }
 
     /**
+     * Test if the file can be passed as null
+     */
+    @SuppressWarnings("unused")
+    @Test
+    public void testFileIsNull()
+    {
+        String folder = "/validfolder/";
+        BaseDocument baseDocument = new BaseDocument(this.connection, folder, null);
+    }
+
+    /**
      * Check if an IllegalArgumentException is thrown when the folder doesn't
      * end with a forward slash
      */

@@ -122,11 +122,11 @@ public class DocumentManager extends BaseConnection
     public String getRawContent(TextDocument document)
             throws CommandAbortedException, Exception, UnsupportedEncodingException
     {
-        if (!this.exists(document.getFileName(), document.getFileExtension())) {
-            throw new Exception("No file called " + document.getFileName() + document.getFileExtension() + " found.");
+        if (!this.exists(document.getName(), document.getExtension())) {
+            throw new Exception("No file called " + document.getName() + document.getExtension() + " found.");
         }
 
-        String fullPath = document.getFolder() + document.getFileName() + document.getFileExtension();
+        String fullPath = document.getFolder() + document.getName() + document.getExtension();
 
         XInputStream inputStream = (XInputStream) this.fileAccess.getStream(fullPath).getInputStream();
         StringBuffer buffer = new StringBuffer();
@@ -145,26 +145,26 @@ public class DocumentManager extends BaseConnection
     /**
      * Open an existing document
      * 
-     * @param fileName
-     *            The document's name
-     * @param fileExtension
-     *            The document's extension
+     * @param file
+     *            The full file name plus extension.
      * @return a TextDocument object
      * @throws CommandAbortedException
      * @throws Exception
      */
-    public TextDocument open(String fileName, String fileExtension) throws CommandAbortedException, Exception
+    public TextDocument open(String file) throws CommandAbortedException, Exception
     {
-        if (!AVAILABLE_EXTENSIONS.contains(fileExtension)) {
-            throw new Exception("Unsupported file extension \"" + fileExtension
+        BaseDocument document = new BaseDocument(this.connection, this.folder, file);
+        if (!AVAILABLE_EXTENSIONS.contains(document.getExtension())) {
+            throw new Exception("Unsupported file extension \"" + document.getExtension()
                     + "\", does not match any of the following available extensions: " + AVAILABLE_EXTENSIONS + ".");
         }
 
-        if (!this.exists(fileName, fileExtension)) {
-            throw new Exception("File with file name " + fileName + fileExtension + " does not exist.");
+        if (!this.exists(document.getName(), document.getExtension())) {
+            throw new Exception(
+                    "File with file name " + document.getName() + document.getExtension() + " does not exist.");
         }
 
-        return new TextDocument(this.connection, this.folder, fileName, fileExtension);
+        return new TextDocument(this.connection, this.folder, file);
     }
 
     /**
@@ -192,8 +192,8 @@ public class DocumentManager extends BaseConnection
             index++;
         }
 
-        String fileName = document.getFileName() + document.getFileExtension();
-        String fullPath = "file://" + this.folder + fileName;
+        String file = document.getName() + document.getExtension();
+        String fullPath = "file://" + this.folder + file;
 
         storeable.storeAsURL(fullPath, options);
     }
@@ -208,7 +208,7 @@ public class DocumentManager extends BaseConnection
      */
     public void delete(TextDocument document) throws CommandAbortedException, Exception
     {
-        String filePath = this.folder + document.getFileName() + document.getFileExtension();
+        String filePath = this.folder + document.getName() + document.getExtension();
         this.fileAccess.delete(filePath);
     }
 
