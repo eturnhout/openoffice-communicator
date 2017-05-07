@@ -53,7 +53,7 @@ public class ConfigReader
             propertyLoader.load(input);
         } catch (IOException ex) {
             throw new IOException(
-                    "Please create a config file with the name \"config.properties\" and values \"host=yourhost\" and \"port=yourport\" to start testing.");
+                    "Please create a config file with the name \"config.properties\" and values \"host=yourhost\", \"port=yourport\" and \"folder=fullpath\" to start testing.");
         } finally {
             if (input != null) {
                 try {
