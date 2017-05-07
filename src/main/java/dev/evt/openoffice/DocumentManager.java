@@ -98,10 +98,8 @@ public class DocumentManager extends BaseConnection
 
         byte[] bytes = new byte[128];
         int read = 0;
-        int amount = 0;
 
         while ((read = inputStream.read(bytes)) != -1) {
-            amount += bytes.length;
             outputStream.writeBytes(bytes);
         }
 
@@ -119,9 +117,10 @@ public class DocumentManager extends BaseConnection
      * @return the document's content in string format
      * @throws CommandAbortedException
      * @throws Exception
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
-    public String getRawContent(TextDocument document) throws CommandAbortedException, Exception, UnsupportedEncodingException
+    public String getRawContent(TextDocument document)
+            throws CommandAbortedException, Exception, UnsupportedEncodingException
     {
         if (!this.exists(document.getFileName(), document.getFileExtension())) {
             throw new Exception("No file called " + document.getFileName() + document.getFileExtension() + " found.");
