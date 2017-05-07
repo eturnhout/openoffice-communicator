@@ -2,24 +2,12 @@ package dev.evt.openoffice;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 public class ConnectionTest
 {
-    protected ConfigReader configReader;
-
-    /**
-     * Create the test case
-     *
-     * @param testName
-     *            name of the test case
-     * @throws IOException
-     */
-    public ConnectionTest() throws IOException
+    public ConnectionTest()
     {
-        this.configReader = new ConfigReader(null);
     }
 
     /**
