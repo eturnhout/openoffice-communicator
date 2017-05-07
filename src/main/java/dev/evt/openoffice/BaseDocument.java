@@ -27,6 +27,11 @@ public class BaseDocument extends BaseConnection
     protected String extension;
 
     /**
+     * The document's properties (important when saving)
+     */
+    protected DocumentProperties properties;
+
+    /**
      * Construct a BaseDocument object
      * 
      * @param connection
@@ -34,15 +39,19 @@ public class BaseDocument extends BaseConnection
      * @param folder
      *            Full path to the directory of the document
      * @param file
-     *            File name plus extension
+     *            (optional) File name plus extension
+     * @param properties
+     *            (optional) The document's properties
+     * 
      */
-    public BaseDocument(Connection connection, String folder, String file)
+    public BaseDocument(Connection connection, String folder, String file, DocumentProperties properties)
     {
         super(connection);
         this.setFolder(folder);
         if (file != null) {
             this.parseFile(file);
         }
+        this.properties = properties;
     }
 
     /**
@@ -112,6 +121,16 @@ public class BaseDocument extends BaseConnection
     public String getExtension()
     {
         return this.extension;
+    }
+
+    /**
+     * Get the document's properties
+     * 
+     * @return the document's properties
+     */
+    public DocumentProperties getProperties()
+    {
+        return this.properties;
     }
 
     /**

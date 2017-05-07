@@ -14,11 +14,7 @@ public class DocumentProperties
     public final static String PROPERTY_FORMAT = "FilterName";
     public final static String PROPERTIES_AVAILABLE = PROPERTY_OVERWRITE + ", " + PROPERTY_FORMAT;
 
-    public final static String VALUE_FORMAT_HTML = "HTML (StarWriter)";
-    public final static String VALUE_FORMAT_DOC = "MS Word 97";
     public final static String VALUE_BOOLEAN_TRUE = String.valueOf(true);
-
-    public final static String VALUES_AVAILABLE = VALUE_FORMAT_HTML + ", " + VALUE_BOOLEAN_TRUE;
 
     protected ArrayList<DocumentProperty> properties;
 
@@ -87,11 +83,6 @@ public class DocumentProperties
         if (!PROPERTIES_AVAILABLE.contains(property.getName())) {
             throw new Exception("Invalid property " + property.getName() + ", the following options are available: "
                     + PROPERTIES_AVAILABLE + ".");
-        }
-
-        if (!VALUES_AVAILABLE.contains(property.getValue())) {
-            throw new Exception("Invalid value " + property.getValue() + ", the following options are available: "
-                    + VALUES_AVAILABLE + ".");
         }
     }
 }

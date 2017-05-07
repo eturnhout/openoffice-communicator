@@ -28,6 +28,8 @@ public class DocumentManager extends BaseConnection
      */
     public final static String AVAILABLE_EXTENSIONS = ".doc, .docx .html";
 
+    public final static int NEW_TEXT_DOCUMENT = 1;
+
     protected String folder;
     protected FileAccess fileAccess;
 
@@ -76,24 +78,21 @@ public class DocumentManager extends BaseConnection
     /**
      * Creates the file from a input stream
      * 
-     * @param fileName
-     *            The file's name plus extension
-     * @param fileExtension
-     *            The file's extension
+     * @param file
+     *            The file name plus extension.
      * @param inputStream
      *            The input stream
      * @throws CommandAbortedException
      * @throws Exception
      * @throws java.io.IOException
      */
-    public void createFromInputStream(String fileName, String fileExtension, InputStream inputStream)
-            throws CommandAbortedException, Exception, java.io.IOException
+    public void createFromInputStream(String file, InputStream inputStream) throws CommandAbortedException, Exception, java.io.IOException
     {
-        if (this.exists(fileName, fileExtension)) {
-            throw new Exception("There's already a file called " + fileName + fileExtension + ".");
+        if (this.exists(file)) {
+            throw new Exception("There's already a file called " + file + ".");
         }
 
-        String fullPath = this.folder + fileName + fileExtension;
+        String fullPath = this.folder + file;
         XOutputStream outputStream = (XOutputStream) fileAccess.getStream(fullPath).getOutputStream();
 
         byte[] bytes = new byte[128];
@@ -119,10 +118,9 @@ public class DocumentManager extends BaseConnection
      * @throws Exception
      * @throws UnsupportedEncodingException
      */
-    public String getRawContent(TextDocument document)
-            throws CommandAbortedException, Exception, UnsupportedEncodingException
+    public String getRawContent(BaseDocument document) throws CommandAbortedException, Exception, UnsupportedEncodingException
     {
-        if (!this.exists(document.getName(), document.getExtension())) {
+        if (!this.exists(document.getName() + document.getExtension())) {
             throw new Exception("No file called " + document.getName() + document.getExtension() + " found.");
         }
 
@@ -143,47 +141,81 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
+     * Open a new document
+     * 
+     * @param type
+     *            The type of document. See the managers static properties for
+     *            the available options.
+     * @return a new document, the kind depends on the type argument or null on
+     *         failure.
+     * @throws java.lang.Exception
+     */
+    public BaseDocument openNew(int type) throws java.lang.Exception
+    {
+        DocumentProperties properties = new DocumentProperties();
+
+        if (type == NEW_TEXT_DOCUMENT) {
+            properties.addProperty(new DocumentProperty(DocumentProperties.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
+            return new TextDocument(this.connection, this.folder, null, properties);
+        }
+
+        return null;
+    }
+
+    /**
      * Open an existing document
      * 
      * @param file
      *            The full file name plus extension.
      * @return a TextDocument object
-     * @throws CommandAbortedException
-     * @throws Exception
+     * @throws java.lang.Exception
      */
-    public TextDocument open(String file) throws CommandAbortedException, Exception
+    public BaseDocument open(String file) throws java.lang.Exception
     {
-        BaseDocument document = new BaseDocument(this.connection, this.folder, file);
-        if (!AVAILABLE_EXTENSIONS.contains(document.getExtension())) {
-            throw new Exception("Unsupported file extension \"" + document.getExtension()
-                    + "\", does not match any of the following available extensions: " + AVAILABLE_EXTENSIONS + ".");
+        BaseDocument baseDocument = new BaseDocument(this.connection, this.folder, file, null);
+
+        if (!this.exists(baseDocument.getName() + baseDocument.getExtension())) {
+            throw new Exception("File with file name " + baseDocument.getName() + baseDocument.getExtension() + " does not exist.");
         }
 
-        if (!this.exists(document.getName(), document.getExtension())) {
-            throw new Exception(
-                    "File with file name " + document.getName() + document.getExtension() + " does not exist.");
+        if (TextDocument.EXTENSIONS_AVAILABLE.contains(baseDocument.getExtension())) {
+            DocumentProperties properties = new DocumentProperties();
+
+            if (baseDocument.getExtension() == TextDocument.EXTENSION_DOC || baseDocument.getExtension() == TextDocument.EXTENSION_DOCX) {
+                properties.addProperty(new DocumentProperty(DocumentProperties.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
+            } else if (baseDocument.getExtension() == TextDocument.EXTENSION_HTML) {
+                properties.addProperty(new DocumentProperty(DocumentProperties.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_HTML));
+            }
+
+            return new TextDocument(this.connection, this.folder, file, properties);
         }
 
-        return new TextDocument(this.connection, this.folder, file);
+        return null;
     }
 
     /**
      * Saves a document
      * 
      * @param document
-     *            The TextDocument object than needs saving
+     *            The BaseDocument object than needs saving
      * @param properties
      *            Properties that determine how the document will be saved
      * @throws IOException
      */
-    public void save(TextDocument document, DocumentProperties properties) throws IOException
+    public void save(BaseDocument document) throws IOException
     {
-        XStorable storeable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document.getDocument());
-        int indexes = properties.count();
+        XStorable storeable = null;
+
+        if (document instanceof TextDocument) {
+            TextDocument doc = (TextDocument) document;
+            storeable = (XStorable) UnoRuntime.queryInterface(XStorable.class, doc.getDocument());
+        }
+
+        int indexes = document.getProperties().count();
         PropertyValue[] options = new PropertyValue[indexes];
         int index = 0;
 
-        for (DocumentProperty property : properties.getProperties()) {
+        for (DocumentProperty property : document.getProperties().getProperties()) {
             PropertyValue option = new PropertyValue();
             option.Name = property.getName();
             option.Value = (property.getValue() == DocumentProperties.VALUE_BOOLEAN_TRUE) ? true : property.getValue();
@@ -199,14 +231,14 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Delete a document
+     * Delete a document based on it's name plus extension
      * 
      * @param document
      *            The document that needs deleting
      * @throws CommandAbortedException
      * @throws Exception
      */
-    public void delete(TextDocument document) throws CommandAbortedException, Exception
+    public void delete(BaseDocument document) throws CommandAbortedException, Exception
     {
         String filePath = this.folder + document.getName() + document.getExtension();
         this.fileAccess.delete(filePath);
@@ -215,17 +247,15 @@ public class DocumentManager extends BaseConnection
     /**
      * Check if a file already exists
      * 
-     * @param fileName
-     *            Name of the file
-     * @param fileExtension
-     *            The file's extension
+     * @param file
+     *            File name plus extension
      * @return true if the file exists, returns false otherwise
      * @throws CommandAbortedException
      * @throws Exception
      */
-    public boolean exists(String fileName, String fileExtension) throws CommandAbortedException, Exception
+    public boolean exists(String file) throws CommandAbortedException, Exception
     {
-        String filePath = this.folder + fileName + fileExtension;
+        String filePath = this.folder + file;
 
         if (!this.fileAccess.exists(filePath)) {
             return false;
@@ -238,18 +268,24 @@ public class DocumentManager extends BaseConnection
      * Closes the document
      * 
      * @param document
-     *            The TextDocument object that needs closing
+     *            The BaseDocument object that needs closing
      * @throws CloseVetoException
      */
-    public void close(TextDocument document) throws CloseVetoException
+    public void close(BaseDocument document) throws CloseVetoException
     {
-        XStorable storeable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document.getDocument());
-        XCloseable closeable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, storeable);
+        XStorable storable = null;
+
+        if (document instanceof TextDocument) {
+            TextDocument doc = (TextDocument) document;
+            storable = (XStorable) UnoRuntime.queryInterface(XStorable.class, doc.getDocument());
+        }
+
+        XCloseable closeable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, storable);
 
         if (closeable != null) {
             closeable.close(false);
         } else {
-            XComponent component = (XComponent) UnoRuntime.queryInterface(XComponent.class, storeable);
+            XComponent component = (XComponent) UnoRuntime.queryInterface(XComponent.class, storable);
             component.dispose();
         }
     }

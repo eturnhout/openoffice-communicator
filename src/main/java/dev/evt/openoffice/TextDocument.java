@@ -19,13 +19,22 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class TextDocument extends BaseDocument
 {
-    final static String NEW_DOCUMENT = "private:factory/swriter";
+    public final static String NEW_DOCUMENT = "private:factory/swriter";
+    public final static String PROPERTY_VALUE_FORMAT_HTML = "HTML (StarWriter)";
+    public final static String PROPERTY_VALUE_FORMAT_DOC = "MS Word 97";
+
+    public final static String EXTENSION_DOC = ".doc";
+    public final static String EXTENSION_DOCX = ".docx";
+    public final static String EXTENSION_HTML = ".html";
+
+    public final static String EXTENSIONS_AVAILABLE = EXTENSION_DOC + ", " + EXTENSION_DOCX + ", " + EXTENSION_HTML;
 
     protected XTextDocument document;
 
-    public TextDocument(Connection connection, String folder, String file) throws IOException, IllegalArgumentException
+    public TextDocument(Connection connection, String folder, String file, DocumentProperties properties)
+            throws IOException, IllegalArgumentException
     {
-        super(connection, folder, file);
+        super(connection, folder, file, properties);
         this.initialize();
     }
 

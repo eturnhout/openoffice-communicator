@@ -24,7 +24,7 @@ public class BaseDocumentTest
         String file = "somefile.docx";
         String name = "somefile";
         String extension = ".docx";
-        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file);
+        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file, null);
 
         assertEquals(name, baseDocument.getName());
         assertEquals(extension, baseDocument.getExtension());
@@ -38,7 +38,7 @@ public class BaseDocumentTest
     public void testFileIsNull()
     {
         String folder = "/validfolder/";
-        BaseDocument baseDocument = new BaseDocument(this.connection, folder, null);
+        BaseDocument baseDocument = new BaseDocument(this.connection, folder, null, null);
     }
 
     /**
@@ -51,7 +51,7 @@ public class BaseDocumentTest
     {
         String folder = "invalidfolder";
         String file = "somefile.doc";
-        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file);
+        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file, null);
     }
 
     /**
@@ -64,6 +64,6 @@ public class BaseDocumentTest
     {
         String folder = "validfolder/";
         String file = "somefile";
-        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file);
+        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file, null);
     }
 }
