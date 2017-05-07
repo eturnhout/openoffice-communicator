@@ -81,7 +81,6 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>dev.evt.openoffice.App</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
