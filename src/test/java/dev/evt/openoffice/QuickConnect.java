@@ -16,6 +16,11 @@ public class QuickConnect
         return this.connection;
     }
 
+    public ConfigReader getConfigReader()
+    {
+        return this.configReader;
+    }
+
     private void initialize() throws Exception
     {
         String host = this.configReader.getConfig("host");
