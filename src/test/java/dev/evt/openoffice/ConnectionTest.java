@@ -30,11 +30,8 @@ public class ConnectionTest
     @Test
     public void testConnection() throws Exception
     {
-        String host = this.configReader.getConfig("host");
-        int port = Integer.parseInt(this.configReader.getConfig("port"));
-        ConnectionConfig config = new ConnectionConfig(host, port);
-        Connection connection = new Connection(config);
-
+        QuickConnect quickConnect = new QuickConnect();
+        Connection connection = quickConnect.getConnection();
         assertEquals(true, connection.isConnected());
     }
 }
