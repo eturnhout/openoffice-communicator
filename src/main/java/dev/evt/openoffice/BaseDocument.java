@@ -159,7 +159,7 @@ public class BaseDocument extends BaseConnection
         if (file.length() < 3) {
             throw new IllegalArgumentException("Invalid file \"" + file + "\" provided.");
         } else if (!file.contains(".")) {
-            throw new IllegalArgumentException("Invalid file \"" + file + "\" no available found.");
+            throw new IllegalArgumentException("Invalid file \"" + file + "\" no extension found.");
         }
 
         String name = file.substring(0, file.lastIndexOf("."));

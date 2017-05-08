@@ -27,12 +27,13 @@ public class TextDocument extends BaseDocument
     public final static String EXTENSION_DOCX = ".docx";
     public final static String EXTENSION_HTML = ".html";
 
+    public final static String EXTENSION_DEFAULT = EXTENSION_DOC;
+
     public final static String EXTENSIONS_AVAILABLE = EXTENSION_DOC + ", " + EXTENSION_DOCX + ", " + EXTENSION_HTML;
 
     protected XTextDocument document;
 
-    public TextDocument(Connection connection, String folder, String file, DocumentProperties properties)
-            throws IOException, IllegalArgumentException
+    public TextDocument(Connection connection, String folder, String file, DocumentProperties properties) throws IOException, IllegalArgumentException
     {
         super(connection, folder, file, properties);
         this.initialize();
@@ -73,6 +74,8 @@ public class TextDocument extends BaseDocument
 
         if (this.name != null) {
             path = "file://" + this.folder + this.name + this.extension;
+        } else {
+            this.extension = TextDocument.EXTENSION_DEFAULT;
         }
 
         PropertyValue[] lProperties = new PropertyValue[1];
