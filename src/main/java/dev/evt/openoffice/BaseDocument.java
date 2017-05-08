@@ -3,7 +3,7 @@ package dev.evt.openoffice;
 /**
  * <h1>BaseDocument</h1>
  * <p>
- * A base document class used for extending
+ * A base document class used for extending.
  * </p>
  * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
@@ -11,38 +11,43 @@ package dev.evt.openoffice;
  */
 public class BaseDocument extends BaseConnection
 {
+    public final static String PROPERTY_OVERWRITE = "Overwrite";
+    public final static String PROPERTY_FORMAT = "FilterName";
+    public final static String PROPERTIES_AVAILABLE = PROPERTY_OVERWRITE + ", " + PROPERTY_FORMAT;
+
+    public final static String VALUE_BOOLEAN_TRUE = String.valueOf(true);
+
     /**
-     * Full path to the directory of the document
+     * Full path to the directory of the document.
      */
     protected String folder;
 
     /**
-     * Name of this document
+     * Name of this document.
      */
     protected String name;
 
     /**
-     * The document's extension
+     * The document's extension.
      */
     protected String extension;
 
     /**
-     * The document's properties (important when saving)
+     * The document's properties (important when saving).
      */
     protected DocumentProperties properties;
 
     /**
-     * Construct a BaseDocument object
+     * Construct a BaseDocument object.
      * 
      * @param connection
-     *            Connection instance
+     *            Connection instance.
      * @param folder
-     *            Full path to the directory of the document
+     *            Full path to the directory of the document.
      * @param file
-     *            (optional) File name plus extension
+     *            (optional) File name plus extension.
      * @param properties
-     *            (optional) The document's properties
-     * 
+     *            (optional) The document's properties.
      */
     public BaseDocument(Connection connection, String folder, String file, DocumentProperties properties)
     {
@@ -55,25 +60,24 @@ public class BaseDocument extends BaseConnection
     }
 
     /**
-     * Set the folder location of the document
+     * Set the folder location of the document.
      * 
      * @param folder
-     *            The location of the document
+     *            The location of the document.
      */
     public void setFolder(String folder) throws IllegalArgumentException
     {
         if (folder.lastIndexOf("/") != folder.length() - 1) {
-            throw new IllegalArgumentException(
-                    "Invalid folder \"" + folder + "\" Make sure the folder ends with a \"/\".");
+            throw new IllegalArgumentException("Invalid folder \"" + folder + "\" Make sure the folder ends with a \"/\".");
         }
 
         this.folder = folder;
     }
 
     /**
-     * Get the folder location of the document
+     * Get the folder location of the document.
      * 
-     * @return The location of the document
+     * @return The location of the document.
      */
     public String getFolder()
     {
@@ -81,10 +85,10 @@ public class BaseDocument extends BaseConnection
     }
 
     /**
-     * Set the document's name
+     * Set the document's name.
      * 
-     * @param fileName
-     *            Name of the document
+     * @param name
+     *            Name of the document.
      */
     public void setName(String name)
     {
@@ -94,7 +98,7 @@ public class BaseDocument extends BaseConnection
     /**
      * Get the document's name.
      * 
-     * @return the document's name
+     * @return the document's name.
      */
     public String getName()
     {
@@ -105,8 +109,8 @@ public class BaseDocument extends BaseConnection
      * The document's extension. This is useful when saving the document in
      * another format.
      * 
-     * @param fileExtension
-     *            The document's extension
+     * @param extension
+     *            The document's extension.
      */
     public void setExtension(String extension)
     {
@@ -116,7 +120,7 @@ public class BaseDocument extends BaseConnection
     /**
      * Get the document's extension.
      * 
-     * @return the document's extension
+     * @return the document's extension.
      */
     public String getExtension()
     {
@@ -124,9 +128,20 @@ public class BaseDocument extends BaseConnection
     }
 
     /**
-     * Get the document's properties
+     * Set the document's properties.
      * 
-     * @return the document's properties
+     * @param properties
+     *            A DocumentProperties object.
+     */
+    public void setProperties(DocumentProperties properties)
+    {
+        this.properties = properties;
+    }
+
+    /**
+     * Get the document's properties.
+     * 
+     * @return the document's properties.
      */
     public DocumentProperties getProperties()
     {
@@ -134,10 +149,10 @@ public class BaseDocument extends BaseConnection
     }
 
     /**
-     * Splits the file and sets the fileName and fileExtension properties
+     * Splits the file and sets the fileName and fileExtension properties.
      * 
      * @param file
-     *            File name + extension
+     *            File name + extension.
      */
     protected void parseFile(String file) throws IllegalArgumentException
     {

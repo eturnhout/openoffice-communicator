@@ -16,30 +16,28 @@ import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
 
 /**
- * Manager that handles document storage
+ * <h1>DocumentManager</h1>
+ * <p>
+ * Manager that handles document storage.
+ * </p>
  * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
 public class DocumentManager extends BaseConnection
 {
-    /**
-     * List of comma separated available extensions
-     */
-    public final static String AVAILABLE_EXTENSIONS = ".doc, .docx .html";
-
     public final static int NEW_TEXT_DOCUMENT = 1;
 
     protected String folder;
     protected FileAccess fileAccess;
 
     /**
-     * Constructs a DocumentManager object
+     * Constructs a DocumentManager object.
      * 
      * @param connection
-     *            The connection to a running OpenOffice service
+     *            The connection to a running OpenOffice service.
      * @param folder
-     *            The storage folder on the filesystem for the documents
+     *            The storage folder on the filesystem for the documents.
      * @throws Exception
      */
     public DocumentManager(Connection connection, String folder) throws Exception
@@ -47,18 +45,14 @@ public class DocumentManager extends BaseConnection
         super(connection);
         this.setFolder(folder);
 
-        try {
-            this.fileAccess = new FileAccess(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.fileAccess = new FileAccess(connection);
     }
 
     /**
-     * Set the location where the documents will be handled
+     * Set the location where the documents will be handled.
      * 
      * @param folder
-     *            Full system path to the folder
+     *            Full system path to the folder.
      */
     public void setFolder(String folder)
     {
@@ -66,9 +60,9 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Set the location where the documents will be handled
+     * Set the location where the documents will be handled.
      * 
-     * @return folder The location of the documents storage folder
+     * @return folder The location of the documents storage folder.
      */
     public String getFolder()
     {
@@ -76,16 +70,17 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Creates the file from a input stream
+     * Creates the file from a input stream.
      * 
      * @param file
      *            The file name plus extension.
      * @param inputStream
-     *            The input stream
+     *            A file's input stream.
      * @throws CommandAbortedException
      * @throws Exception
      * @throws java.io.IOException
      */
+    @SuppressWarnings("unused")
     public void createFromInputStream(String file, InputStream inputStream) throws CommandAbortedException, Exception, java.io.IOException
     {
         if (this.exists(file)) {
@@ -113,11 +108,12 @@ public class DocumentManager extends BaseConnection
      * @param document
      *            The TextDocument from which to get the content. This document
      *            must be stored and available on the filesystem.
-     * @return the document's content in string format
+     * @return the document's content in string format.
      * @throws CommandAbortedException
      * @throws Exception
      * @throws UnsupportedEncodingException
      */
+    @SuppressWarnings("unused")
     public String getRawContent(BaseDocument document) throws CommandAbortedException, Exception, UnsupportedEncodingException
     {
         if (!this.exists(document.getName() + document.getExtension())) {
@@ -141,7 +137,7 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Open a new document
+     * Open a new document.
      * 
      * @param type
      *            The type of document. See the managers static properties for
@@ -155,7 +151,7 @@ public class DocumentManager extends BaseConnection
         DocumentProperties properties = new DocumentProperties();
 
         if (type == NEW_TEXT_DOCUMENT) {
-            properties.addProperty(new DocumentProperty(DocumentProperties.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
+            properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
             return new TextDocument(this.connection, this.folder, null, properties);
         }
 
@@ -163,7 +159,7 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Open an existing document
+     * Open an existing document.
      * 
      * @param file
      *            The full file name plus extension.
@@ -182,9 +178,9 @@ public class DocumentManager extends BaseConnection
             DocumentProperties properties = new DocumentProperties();
 
             if (baseDocument.getExtension() == TextDocument.EXTENSION_DOC || baseDocument.getExtension() == TextDocument.EXTENSION_DOCX) {
-                properties.addProperty(new DocumentProperty(DocumentProperties.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
+                properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
             } else if (baseDocument.getExtension() == TextDocument.EXTENSION_HTML) {
-                properties.addProperty(new DocumentProperty(DocumentProperties.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_HTML));
+                properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_HTML));
             }
 
             return new TextDocument(this.connection, this.folder, file, properties);
@@ -194,12 +190,10 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Saves a document
+     * Saves a document.
      * 
      * @param document
-     *            The BaseDocument object than needs saving
-     * @param properties
-     *            Properties that determine how the document will be saved
+     *            The BaseDocument object than needs saving.
      * @throws IOException
      */
     public void save(BaseDocument document) throws IOException
@@ -218,7 +212,7 @@ public class DocumentManager extends BaseConnection
         for (DocumentProperty property : document.getProperties().getProperties()) {
             PropertyValue option = new PropertyValue();
             option.Name = property.getName();
-            option.Value = (property.getValue() == DocumentProperties.VALUE_BOOLEAN_TRUE) ? true : property.getValue();
+            option.Value = (property.getValue() == BaseDocument.VALUE_BOOLEAN_TRUE) ? true : property.getValue();
 
             options[index] = option;
             index++;
@@ -231,10 +225,10 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Delete a document based on it's name plus extension
+     * Delete a document based on it's name plus extension.
      * 
      * @param document
-     *            The document that needs deleting
+     *            The document that needs deleting.
      * @throws CommandAbortedException
      * @throws Exception
      */
@@ -245,30 +239,10 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Check if a file already exists
-     * 
-     * @param file
-     *            File name plus extension
-     * @return true if the file exists, returns false otherwise
-     * @throws CommandAbortedException
-     * @throws Exception
-     */
-    public boolean exists(String file) throws CommandAbortedException, Exception
-    {
-        String filePath = this.folder + file;
-
-        if (!this.fileAccess.exists(filePath)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Closes the document
+     * Closes the document.
      * 
      * @param document
-     *            The BaseDocument object that needs closing
+     *            The BaseDocument object that needs closing.
      * @throws CloseVetoException
      */
     public void close(BaseDocument document) throws CloseVetoException
@@ -288,5 +262,25 @@ public class DocumentManager extends BaseConnection
             XComponent component = (XComponent) UnoRuntime.queryInterface(XComponent.class, storable);
             component.dispose();
         }
+    }
+
+    /**
+     * Check if a file already exists.
+     * 
+     * @param file
+     *            File name plus extension.
+     * @return true if the file exists, returns false otherwise.
+     * @throws CommandAbortedException
+     * @throws Exception
+     */
+    public boolean exists(String file) throws CommandAbortedException, Exception
+    {
+        String filePath = this.folder + file;
+
+        if (!this.fileAccess.exists(filePath)) {
+            return false;
+        }
+
+        return true;
     }
 }

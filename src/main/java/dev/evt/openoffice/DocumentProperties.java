@@ -3,23 +3,20 @@ package dev.evt.openoffice;
 import java.util.ArrayList;
 
 /**
- * Create a list of properties that determine how a document is saved
+ * <h1>DocumentProperties</h1>
+ * <p>
+ * Create a list of properties that determine how a document is saved.
+ * </p>
  * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
 public class DocumentProperties
 {
-    public final static String PROPERTY_OVERWRITE = "Overwrite";
-    public final static String PROPERTY_FORMAT = "FilterName";
-    public final static String PROPERTIES_AVAILABLE = PROPERTY_OVERWRITE + ", " + PROPERTY_FORMAT;
-
-    public final static String VALUE_BOOLEAN_TRUE = String.valueOf(true);
-
     protected ArrayList<DocumentProperty> properties;
 
     /**
-     * Constructs a DocumentProperties object
+     * Constructs a DocumentProperties object.
      */
     public DocumentProperties()
     {
@@ -27,10 +24,10 @@ public class DocumentProperties
     }
 
     /**
-     * Add a new property to the properties
+     * Add a new property to the properties.
      * 
      * @param property
-     *            a new DocumentProperty
+     *            A new DocumentProperty object.
      * @throws Exception
      */
     public void addProperty(DocumentProperty property) throws Exception
@@ -40,10 +37,10 @@ public class DocumentProperties
     }
 
     /**
-     * Remove a property from the list
+     * Remove a property from the list.
      * 
      * @param property
-     *            the DocumentProperty that needs removing
+     *            the DocumentProperty that needs removing.
      */
     public void removeProperty(DocumentProperty property)
     {
@@ -51,9 +48,9 @@ public class DocumentProperties
     }
 
     /**
-     * Get the list of properties
+     * Get the list of properties.
      * 
-     * @return an array list of DocumentProperty objects
+     * @return an array list of DocumentProperty objects.
      */
     public ArrayList<DocumentProperty> getProperties()
     {
@@ -61,9 +58,9 @@ public class DocumentProperties
     }
 
     /**
-     * Get the amount of properties currently int the list
+     * Get the amount of properties currently in the list.
      * 
-     * @return list size as integer
+     * @return list size as integer.
      */
     public int count()
     {
@@ -72,17 +69,17 @@ public class DocumentProperties
 
     /**
      * Validates the property by checking the property name and value against
-     * the PROPERTIES_AVAILABLE and VALUES_AVAILABLE constants
+     * the PROPERTIES_AVAILABLE and VALUES_AVAILABLE constants in every document
+     * class.
      * 
      * @param property
-     *            The DocumentProperty that needs validating
+     *            The DocumentProperty that needs validating.
      * @throws Exception
      */
     protected void validate(DocumentProperty property) throws Exception
     {
-        if (!PROPERTIES_AVAILABLE.contains(property.getName())) {
-            throw new Exception("Invalid property " + property.getName() + ", the following options are available: "
-                    + PROPERTIES_AVAILABLE + ".");
+        if (!TextDocument.PROPERTIES_AVAILABLE.contains(property.getName())) {
+            throw new Exception("Invalid property " + property.getName() + ", the following options are available: " + TextDocument.PROPERTIES_AVAILABLE + ".");
         }
     }
 }
