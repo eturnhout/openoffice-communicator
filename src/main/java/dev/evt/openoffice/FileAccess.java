@@ -7,7 +7,10 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
 /**
+ * <h1>FileAccess</h1>
+ * <p>
  * Simple file interaction
+ * </p>
  * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
@@ -20,7 +23,7 @@ class FileAccess extends BaseConnection
      * Construct a FileAccess object
      * 
      * @param Connection
-     *            connection
+     *            A connection to OpenOffice.
      * @throws Exception
      */
     public FileAccess(Connection connection) throws Exception
@@ -30,11 +33,11 @@ class FileAccess extends BaseConnection
     }
 
     /**
-     * Check if a file exists
+     * Check if a file exists.
      * 
-     * @param String
-     *            filePath
-     * @return boolean
+     * @param filePath
+     *            Full path to the file.
+     * @return true or false.
      * @throws CommandAbortedException
      * @throws com.sun.star.uno.Exception
      */
@@ -44,10 +47,10 @@ class FileAccess extends BaseConnection
     }
 
     /**
-     * Delete a file
+     * Delete a file.
      * 
      * @param filePath
-     *            The full path to the file
+     *            The full path to the file.
      * @throws CommandAbortedException
      * @throws Exception
      */
@@ -57,10 +60,10 @@ class FileAccess extends BaseConnection
     }
 
     /**
-     * General file stream to access the input or output stream of a file
+     * General file stream to access the input or output stream of a file.
      * 
      * @param path
-     *            full path to the file
+     *            Full path to the file.
      * @return General stream to access the input/output streams
      * @throws CommandAbortedException
      * @throws Exception
@@ -72,16 +75,13 @@ class FileAccess extends BaseConnection
 
     /**
      * Initializes the object XSimpleFileAccess object needed to interact with
-     * the filesystem
+     * the filesystem.
      * 
-     * @param void
-     * @return void
      * @throws Exception
      */
     private void initialize() throws Exception
     {
-        Object fileAccessObject = this.connection.getServiceFactory()
-                .createInstance("com.sun.star.ucb.SimpleFileAccess");
+        Object fileAccessObject = this.connection.getServiceFactory().createInstance("com.sun.star.ucb.SimpleFileAccess");
         this.fileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, fileAccessObject);
     }
 }

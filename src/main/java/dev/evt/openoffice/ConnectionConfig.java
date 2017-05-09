@@ -1,7 +1,10 @@
 package dev.evt.openoffice;
 
 /**
- * Create the configurations needed to connect to OpenOffice
+ * <h1>ConnectionConfig</h1>
+ * <p>
+ * Create the configurations needed to connect to OpenOffice.
+ * </p>
  * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
@@ -12,12 +15,12 @@ public class ConnectionConfig
     protected int port;
 
     /**
-     * Construct a ConnectionConfig object
+     * Construct a ConnectionConfig object.
      * 
      * @param host
-     *            The host to connect to
+     *            The host to connect to.
      * @param port
-     *            The port that the OpenOffice service is listening on
+     *            The port that the OpenOffice service is listening on.
      */
     public ConnectionConfig(String host, int port)
     {
@@ -26,10 +29,10 @@ public class ConnectionConfig
     }
 
     /**
-     * Set the host on which OpenOffice is running
+     * Set the host on which OpenOffice is running.
      * 
      * @param host
-     *            The host to connect to
+     *            The host to connect to.
      */
     public void setHost(String host)
     {
@@ -37,9 +40,9 @@ public class ConnectionConfig
     }
 
     /**
-     * Get the host on which OpenOffice is running on
+     * Get the host on which OpenOffice is running on.
      * 
-     * @return host The host to connect to
+     * @return host The host to connect to.
      */
     public String getHost()
     {
@@ -47,10 +50,10 @@ public class ConnectionConfig
     }
 
     /**
-     * Set the port on which OpenOffice is listening to
+     * Set the port on which OpenOffice is listening to.
      * 
      * @param port
-     *            The port that the OpenOffice service is listening on
+     *            The port that the OpenOffice service is listening on.
      */
     public void setPort(int port)
     {
@@ -58,9 +61,9 @@ public class ConnectionConfig
     }
 
     /**
-     * Get the port on which OpenOffice is listening to
+     * Get the port on which OpenOffice is listening to.
      * 
-     * @return port The port that the OpenOffice service is listening on
+     * @return the port that the OpenOffice service is listening on.
      */
     public int getPort()
     {

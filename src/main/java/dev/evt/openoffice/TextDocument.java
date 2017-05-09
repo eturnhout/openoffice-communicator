@@ -41,6 +41,19 @@ public class TextDocument extends BaseDocument
 
     protected XTextDocument document;
 
+    /**
+     * 
+     * @param connection
+     *            A connection to OpenOffice.
+     * @param folder
+     *            Full path to an existing folder.
+     * @param file
+     *            (optional) the file name plus extension.
+     * @param properties
+     *            (optional) the document's properties. Default properties will
+     *            be set when this parameter is null.
+     * @throws Exception
+     */
     public TextDocument(Connection connection, String folder, String file, DocumentProperties properties) throws Exception
     {
         super(connection, folder, file, properties);
@@ -48,9 +61,9 @@ public class TextDocument extends BaseDocument
     }
 
     /**
-     * Get the documents text
+     * Get the document's text.
      * 
-     * @return the documents text in String format
+     * @return the document's text in String format.
      */
     public String getText()
     {
@@ -62,7 +75,7 @@ public class TextDocument extends BaseDocument
      * Get the XTextDocument object. This can be used to interact with the
      * document.
      * 
-     * @return the XTextDocument object for this document
+     * @return the XTextDocument object for this document.
      */
     public XTextDocument getDocument()
     {
@@ -70,7 +83,7 @@ public class TextDocument extends BaseDocument
     }
 
     /**
-     * Check if a extension is supported by the TextDocument object
+     * Check if a extension is supported by the TextDocument object.
      * 
      * @param extension
      *            The extension to check.
@@ -82,8 +95,9 @@ public class TextDocument extends BaseDocument
     }
 
     /**
-     * Initialize this object. This will fill in the XTextDocument object with a
-     * new or existing file if it already exists
+     * Initialize this TextDocument object. This will fill in the XTextDocument
+     * object with a new or existing file if it already exists. Also sets
+     * default properties when the properties parameter is set to null.
      * 
      * @throws Exception
      * @throws IllegalArgumentException

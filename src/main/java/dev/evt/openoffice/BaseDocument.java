@@ -15,6 +15,11 @@ public class BaseDocument extends BaseConnection
     public final static String PROPERTY_FORMAT = "FilterName";
     public final static String PROPERTIES_AVAILABLE = PROPERTY_OVERWRITE + ", " + PROPERTY_FORMAT;
 
+    /**
+     * Did it this way so cause a DocumentProperty expects a string, OpenOffice
+     * however expects a boolean for some property options like Overwrite. This
+     * should be converted to a boolean.
+     */
     public final static String VALUE_BOOLEAN_TRUE = String.valueOf(true);
 
     /**

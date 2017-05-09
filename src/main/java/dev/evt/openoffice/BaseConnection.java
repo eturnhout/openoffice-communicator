@@ -5,8 +5,11 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
 /**
+ * <h1>BaseConnection</h1>
+ * <p>
  * Sets and makes the connection available for use in other classes when
  * extending
+ * </p>
  * 
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
@@ -17,10 +20,10 @@ public class BaseConnection
     protected XComponentLoader componentLoader;
 
     /**
-     * Constructs a BaseConnection object
+     * Constructs a BaseConnection object.
      * 
      * @param connection
-     *            The connection to a running OpenOffice service
+     *            The connection to a running OpenOffice service.
      */
     public BaseConnection(Connection connection)
     {
@@ -29,11 +32,10 @@ public class BaseConnection
     }
 
     /**
-     * Set the connection to interact with OpenOffice
+     * Set the connection to interact with OpenOffice.
      * 
      * @param Connection
-     *            connection
-     * @return void
+     *            The connection to a running OpenOffice service.
      */
     public void setConnection(Connection connection)
     {
@@ -41,10 +43,9 @@ public class BaseConnection
     }
 
     /**
-     * Get the connection from this FileAccess object
+     * Get the connection from this BaseConnection object.
      * 
-     * @param void
-     * @return Connection connection
+     * @return the connection to a running OpenOffice service.
      */
     public Connection getConnection()
     {
@@ -52,9 +53,9 @@ public class BaseConnection
     }
 
     /**
-     * Get the XComponentLoader. This can be used to create/open documents
+     * Get the XComponentLoader. This can be used to create/open documents.
      * 
-     * @return XComponentLoader
+     * @return the XComponentLoader.
      */
     public XComponentLoader getComponentLoader()
     {
@@ -62,7 +63,7 @@ public class BaseConnection
     }
 
     /**
-     * Initializes the Desktop object
+     * Initializes the XComponentLoader object.
      */
     private void initializeComponentLoader()
     {

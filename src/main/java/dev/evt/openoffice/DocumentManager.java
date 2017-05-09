@@ -106,8 +106,8 @@ public class DocumentManager extends BaseConnection
      * Get the document's raw content as a string. Handy for html documents.
      * 
      * @param document
-     *            The TextDocument from which to get the content. This document
-     *            must be stored and available on the filesystem.
+     *            The document from which to get the content. This document must
+     *            be saved and available on the filesystem.
      * @return the document's content in string format.
      * @throws CommandAbortedException
      * @throws Exception
@@ -182,7 +182,7 @@ public class DocumentManager extends BaseConnection
      * Saves a document.
      * 
      * @param document
-     *            The BaseDocument object than needs saving.
+     *            The BaseDocument object that needs saving.
      * @throws IOException
      */
     public void save(BaseDocument document) throws IOException
@@ -214,7 +214,8 @@ public class DocumentManager extends BaseConnection
     }
 
     /**
-     * Delete a document based on it's name plus extension.
+     * Delete a document. This happens based on the document's name and
+     * extension.
      * 
      * @param document
      *            The document that needs deleting.

@@ -32,7 +32,6 @@ public class DocumentProperties
      */
     public void addProperty(DocumentProperty property) throws Exception
     {
-        this.validate(property);
         this.properties.add(property);
     }
 
@@ -40,7 +39,7 @@ public class DocumentProperties
      * Remove a property from the list.
      * 
      * @param property
-     *            the DocumentProperty that needs removing.
+     *            The DocumentProperty that needs removing.
      */
     public void removeProperty(DocumentProperty property)
     {
@@ -65,21 +64,5 @@ public class DocumentProperties
     public int count()
     {
         return this.properties.size();
-    }
-
-    /**
-     * Validates the property by checking the property name and value against
-     * the PROPERTIES_AVAILABLE and VALUES_AVAILABLE constants in every document
-     * class.
-     * 
-     * @param property
-     *            The DocumentProperty that needs validating.
-     * @throws Exception
-     */
-    protected void validate(DocumentProperty property) throws Exception
-    {
-        if (!TextDocument.PROPERTIES_AVAILABLE.contains(property.getName())) {
-            throw new Exception("Invalid property " + property.getName() + ", the following options are available: " + TextDocument.PROPERTIES_AVAILABLE + ".");
-        }
     }
 }
