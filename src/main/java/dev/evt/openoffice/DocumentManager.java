@@ -148,11 +148,8 @@ public class DocumentManager extends BaseConnection
      */
     public BaseDocument openNew(int type) throws java.lang.Exception
     {
-        DocumentProperties properties = new DocumentProperties();
-
         if (type == NEW_TEXT_DOCUMENT) {
-            properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
-            return new TextDocument(this.connection, this.folder, null, properties);
+            return new TextDocument(this.connection, this.folder, null, null);
         }
 
         return null;
@@ -174,16 +171,8 @@ public class DocumentManager extends BaseConnection
             throw new Exception("File with file name " + baseDocument.getName() + baseDocument.getExtension() + " does not exist.");
         }
 
-        if (TextDocument.EXTENSIONS_AVAILABLE.contains(baseDocument.getExtension())) {
-            DocumentProperties properties = new DocumentProperties();
-
-            if (baseDocument.getExtension() == TextDocument.EXTENSION_DOC || baseDocument.getExtension() == TextDocument.EXTENSION_DOCX) {
-                properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_DOC));
-            } else if (baseDocument.getExtension() == TextDocument.EXTENSION_HTML) {
-                properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_HTML));
-            }
-
-            return new TextDocument(this.connection, this.folder, file, properties);
+        if (TextDocument.isValidExtension(baseDocument.getExtension())) {
+            return new TextDocument(this.connection, this.folder, file, null);
         }
 
         return null;
@@ -221,7 +210,7 @@ public class DocumentManager extends BaseConnection
         String file = document.getName() + document.getExtension();
         String fullPath = "file://" + this.folder + file;
 
-        storeable.storeAsURL(fullPath, options);
+        storeable.storeToURL(fullPath, options);
     }
 
     /**

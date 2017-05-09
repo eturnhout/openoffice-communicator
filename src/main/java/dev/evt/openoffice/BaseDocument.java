@@ -53,10 +53,12 @@ public class BaseDocument extends BaseConnection
     {
         super(connection);
         this.setFolder(folder);
+
         if (file != null) {
             this.parseFile(file);
         }
-        this.properties = properties;
+
+        this.properties = (properties != null) ? properties : new DocumentProperties();
     }
 
     /**
