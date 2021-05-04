@@ -83,27 +83,31 @@ public class DocumentManagerTest
         String name = "testing";
         DocumentManager manager = new DocumentManager(this.connection, folder);
 
-        TextDocument document = (TextDocument) manager.openNew(DocumentManager.NEW_TEXT_DOCUMENT);
-        assertThat(document, instanceOf(TextDocument.class));
+        TextDocument defaultDocument = (TextDocument) manager.openNew(DocumentManager.NEW_TEXT_DOCUMENT);
+        defaultDocument.setName(name);
 
-        document.setName(name);
-
-        assertEquals("testing", document.getName());
-        assertEquals(TextDocument.EXTENSION_DEFAULT, document.getExtension());
-
-        manager.save(document);
-        manager.close(document);
-
-        document = (TextDocument) manager.open(name + TextDocument.EXTENSION_DEFAULT);
-        document.setExtension(TextDocument.EXTENSION_PDF);
+        // We need to set the property "Overwrite" so storeToURL won't fail
         DocumentProperties properties = new DocumentProperties();
-        properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_PDF));
-        document.setProperties(properties);
+        properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_OVERWRITE, BaseDocument.VALUE_BOOLEAN_TRUE));
+        defaultDocument.setProperties(properties);
 
-        manager.save(document);
-        manager.close(document);
-        manager.delete(document);
-        document.setExtension(TextDocument.EXTENSION_DEFAULT);
-        manager.delete(document);
+        manager.save(defaultDocument);
+
+        assertThat(defaultDocument, instanceOf(TextDocument.class));
+        assertEquals("testing", defaultDocument.getName());
+        assertEquals(TextDocument.EXTENSION_DEFAULT, defaultDocument.getExtension());
+
+        manager.close(defaultDocument);
+
+        TextDocument pdfDocument = (TextDocument) manager.open(name + TextDocument.EXTENSION_DEFAULT);
+        pdfDocument.setExtension(TextDocument.EXTENSION_PDF);
+        properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, TextDocument.PROPERTY_VALUE_FORMAT_PDF));
+        pdfDocument.setProperties(properties);
+
+        manager.save(pdfDocument);
+
+        manager.close(pdfDocument);
+        manager.delete(pdfDocument);
+        manager.delete(defaultDocument);
     }
 }
