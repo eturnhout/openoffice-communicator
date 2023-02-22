@@ -1,21 +1,19 @@
 package dev.evt.openoffice;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
 import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
 
-public class DocumentManagerTest
-{
-    protected Connection connection;
-    protected ConfigReader configReader;
+final public class DocumentManagerTest {
+    private Connection connection;
+    private ConfigReader configReader;
 
-    public DocumentManagerTest() throws Exception
-    {
+    public DocumentManagerTest() throws Exception {
         QuickConnect quickConnect = new QuickConnect();
         this.connection = quickConnect.getConnection();
         this.configReader = quickConnect.getConfigReader();
@@ -28,8 +26,7 @@ public class DocumentManagerTest
      * @throws IOException
      */
     @Test
-    public void testTextDocumentToHtml() throws Exception
-    {
+    public void testTextDocumentToHtml() throws Exception {
         this.convertAndDelete(TextDocument.EXTENSION_HTML, TextDocument.PROPERTY_VALUE_FORMAT_HTML);
     }
 
@@ -40,13 +37,11 @@ public class DocumentManagerTest
      * @throws IOException
      */
     @Test
-    public void testTextDocumentPdfExport() throws Exception
-    {
+    public void testTextDocumentPdfExport() throws Exception {
         this.convertAndDelete(TextDocument.EXTENSION_PDF, TextDocument.PROPERTY_VALUE_FORMAT_PDF);
     }
 
-    private void convertAndDelete(String extension, String format) throws Exception
-    {
+    private void convertAndDelete(String extension, String format) throws Exception {
         String folder = this.configReader.getConfig("folder");
         String name = "testing";
         DocumentManager manager = new DocumentManager(this.connection, folder);
@@ -56,9 +51,8 @@ public class DocumentManagerTest
         defaultDocument.setName(name);
 
         // We need to set the property "Overwrite" so storeToURL won't fail
-        DocumentProperties properties = new DocumentProperties();
-        properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_OVERWRITE, BaseDocument.VALUE_BOOLEAN_TRUE));
-        defaultDocument.setProperties(properties);
+        defaultDocument.getProperties()
+                .addProperty(new DocumentProperty(TextDocument.PROPERTY_OVERWRITE, BaseDocument.VALUE_BOOLEAN_TRUE));
 
         manager.save(defaultDocument);
 
@@ -71,9 +65,7 @@ public class DocumentManagerTest
         // Save default document as html
         TextDocument newDocument = (TextDocument) manager.open(name + TextDocument.EXTENSION_DEFAULT);
 
-        // We can re-use the properties from the default document and add the html format prop
-        properties.addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, format));
-        newDocument.setProperties(properties);
+        newDocument.getProperties().addProperty(new DocumentProperty(TextDocument.PROPERTY_FORMAT, format));
         newDocument.setExtension(extension);
 
         manager.save(newDocument);

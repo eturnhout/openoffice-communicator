@@ -6,13 +6,9 @@ import org.junit.Test;
 
 public class ConnectionTest
 {
-    public ConnectionTest()
-    {
-    }
-
     /**
      * Tests if a connection can be made to OpenOffice
-     * 
+     *
      * @throws Exception
      */
     @Test

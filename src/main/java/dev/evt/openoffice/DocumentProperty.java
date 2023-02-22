@@ -5,46 +5,29 @@ package dev.evt.openoffice;
  * <p>
  * A document's property
  * </p>
- * 
- * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
- * @version 1.0
+ *
+ * @author Eelke van Turnhout
  */
-public class DocumentProperty
-{
-    protected String name;
-    protected String value;
+final public class DocumentProperty {
+    private String name;
+    private String value;
 
     /**
      * Constructs a DocumentProperty object.
-     * 
-     * @param name
-     *            The name of the property.
-     * @param value
-     *            The value of the property.
+     *
+     * @param name  the name of the property
+     * @param value the value of the property
      */
-    public DocumentProperty(String name, String value)
-    {
-        this.setName(name);
-        this.setValue(value);
-    }
-
-    public void setName(String name)
-    {
+    public DocumentProperty(String name, String value) {
         this.name = name;
-    }
-
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public void setValue(String value)
-    {
         this.value = value;
     }
 
-    public String getValue()
-    {
+    public String getName() {
+        return this.name;
+    }
+
+    public String getValue() {
         return this.value;
     }
 }

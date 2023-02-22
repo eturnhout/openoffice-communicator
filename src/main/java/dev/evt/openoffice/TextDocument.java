@@ -15,7 +15,7 @@ import com.sun.star.uno.UnoRuntime;
  * <p>
  * Used to interact with text documents.
  * </p>
- * 
+ *
  * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
  * @version 1.0
  */
@@ -42,7 +42,7 @@ public class TextDocument extends BaseDocument
     protected XTextDocument document;
 
     /**
-     * 
+     *
      * @param connection
      *            A connection to OpenOffice.
      * @param folder
@@ -62,7 +62,7 @@ public class TextDocument extends BaseDocument
 
     /**
      * Get the document's text.
-     * 
+     *
      * @return the document's text in String format.
      */
     public String getText()
@@ -74,7 +74,7 @@ public class TextDocument extends BaseDocument
     /**
      * Get the XTextDocument object. This can be used to interact with the
      * document.
-     * 
+     *
      * @return the XTextDocument object for this document.
      */
     public XTextDocument getDocument()
@@ -84,7 +84,7 @@ public class TextDocument extends BaseDocument
 
     /**
      * Check if a extension is supported by the TextDocument object.
-     * 
+     *
      * @param extension
      *            The extension to check.
      * @return true or false.
@@ -98,7 +98,7 @@ public class TextDocument extends BaseDocument
      * Initialize this TextDocument object. This will fill in the XTextDocument
      * object with a new or existing file if it already exists. Also sets
      * default properties when the properties parameter is set to null.
-     * 
+     *
      * @throws Exception
      * @throws IllegalArgumentException
      */
@@ -123,13 +123,12 @@ public class TextDocument extends BaseDocument
 
         XComponent xComponent = this.componentLoader.loadComponentFromURL(path, "_blank", 0, properties);
 
-        this.properties.addProperty(new DocumentProperty(PROPERTY_FORMAT, FILTER_MAPPING.get(this.extension)));
         this.document = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
     }
 
     /**
      * Maps the extensions to the correct filter type.
-     * 
+     *
      * @return a hash map with filters mapped to the correct extension.
      */
     protected static Map<String, String> initFilterMapping()
