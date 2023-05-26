@@ -1,8 +1,9 @@
 package dev.evt.openoffice;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BaseDocumentTest
 {
@@ -46,12 +47,14 @@ public class BaseDocumentTest
      * end with a forward slash
      */
     @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidFolder()
     {
-        String folder = "invalidfolder";
-        String file = "somefile.doc";
-        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            String folder = "invalidfolder";
+            String file = "somefile.doc";
+            BaseDocument baseDocument = new BaseDocument(this.connection, folder, file, null);
+        });
     }
 
     /**
@@ -59,11 +62,13 @@ public class BaseDocumentTest
      * without it's extension
      */
     @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInvalidFile()
     {
-        String folder = "validfolder/";
-        String file = "somefile";
-        BaseDocument baseDocument = new BaseDocument(this.connection, folder, file, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            String folder = "validfolder/";
+            String file = "somefile";
+            BaseDocument baseDocument = new BaseDocument(this.connection, folder, file, null);
+        });
     }
 }

@@ -1,10 +1,9 @@
 package dev.evt.openoffice;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
@@ -56,7 +55,7 @@ final public class DocumentManagerTest {
 
         manager.save(defaultDocument);
 
-        assertThat(defaultDocument, instanceOf(TextDocument.class));
+        assertInstanceOf(TextDocument.class, defaultDocument);
         assertEquals(name, defaultDocument.getName());
         assertEquals(TextDocument.EXTENSION_DEFAULT, defaultDocument.getExtension());
 
@@ -70,7 +69,7 @@ final public class DocumentManagerTest {
 
         manager.save(newDocument);
 
-        assertThat(newDocument, instanceOf(TextDocument.class));
+        assertInstanceOf(TextDocument.class, newDocument);
         assertEquals(name, newDocument.getName());
         assertEquals(extension, newDocument.getExtension());
 
