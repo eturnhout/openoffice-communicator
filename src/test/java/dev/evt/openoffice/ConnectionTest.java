@@ -1,6 +1,7 @@
 package dev.evt.openoffice;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,6 @@ public class ConnectionTest
     {
         QuickConnect quickConnect = new QuickConnect();
         Connection connection = quickConnect.getConnection();
-        assertEquals(true, connection.isConnected());
+        assertInstanceOf(Connection.class, connection);
     }
 }

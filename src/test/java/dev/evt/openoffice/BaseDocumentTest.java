@@ -17,9 +17,10 @@ public class BaseDocumentTest
 
     /**
      * Test if the properties are set correctly and accessible
+     * @throws com.sun.star.uno.Exception
      */
     @Test
-    public void testProperties()
+    public void testProperties() throws com.sun.star.uno.Exception
     {
         String folder = "/some/location/";
         String file = "somefile.docx";
@@ -33,10 +34,11 @@ public class BaseDocumentTest
 
     /**
      * Test if the file can be passed as null
+     * @throws com.sun.star.uno.Exception
      */
     @SuppressWarnings("unused")
     @Test
-    public void testFileIsNull()
+    public void testFileIsNull() throws com.sun.star.uno.Exception
     {
         String folder = "/validfolder/";
         BaseDocument baseDocument = new BaseDocument(this.connection, folder, null, null);
