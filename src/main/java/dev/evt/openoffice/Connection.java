@@ -20,7 +20,6 @@ public class Connection {
     protected XComponentLoader componentLoader;
     protected XMultiServiceFactory serviceFactory;
     protected XUnoUrlResolver urlResolver;
-    protected boolean connected;
 
     /**
      * Connect to an OpenOffice service running in headless mode.
@@ -51,8 +50,6 @@ public class Connection {
         this.componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class,
             this.serviceFactory.createInstance("com.sun.star.frame.Desktop")
         );
-
-        this.connected = true;
     }
 
     /**
@@ -71,14 +68,5 @@ public class Connection {
 
     public XComponentLoader getComponentLoader() {
         return this.componentLoader;
-    }
-
-    /**
-     * Check if a connection exists.
-     *
-     * @return boolean connected
-     */
-    public boolean isConnected() {
-        return this.connected;
     }
 }
