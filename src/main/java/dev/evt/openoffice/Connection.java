@@ -2,6 +2,7 @@ package dev.evt.openoffice;
 
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
@@ -16,6 +17,7 @@ import com.sun.star.uno.UnoRuntime;
 public class Connection {
     static final String UNO_URL_RESLOVER = "com.sun.star.bridge.UnoUrlResolver";
 
+    protected XComponentLoader componentLoader;
     protected XMultiServiceFactory serviceFactory;
     protected XUnoUrlResolver urlResolver;
     protected boolean connected;
@@ -45,6 +47,11 @@ public class Connection {
 
         this.serviceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class,
                 initialObject);
+
+        this.componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class,
+            this.serviceFactory.createInstance("com.sun.star.frame.Desktop")
+        );
+
         this.connected = true;
     }
 
@@ -60,6 +67,10 @@ public class Connection {
 
     public XUnoUrlResolver getUrlResolver() {
         return this.urlResolver;
+    }
+
+    public XComponentLoader getComponentLoader() {
+        return this.componentLoader;
     }
 
     /**

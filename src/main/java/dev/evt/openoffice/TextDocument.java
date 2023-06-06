@@ -121,7 +121,7 @@ public class TextDocument extends BaseDocument
         properties[0].Name = "Hidden";
         properties[0].Value = true;
 
-        XComponent xComponent = this.componentLoader.loadComponentFromURL(path, "_blank", 0, properties);
+        XComponent xComponent = this.connection.getComponentLoader().loadComponentFromURL(path, "_blank", 0, properties);
 
         this.document = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
     }

@@ -20,20 +20,20 @@ import com.sun.star.util.XCloseable;
  * <p>
  * Manager that handles document storage.
  * </p>
- * 
- * @author Eelke van Turnhout <eelketurnhout3@gmail.com>
- * @version 1.0
+ *
+ * @author Eelke van Turnhout
  */
-public class DocumentManager extends BaseConnection
+public class DocumentManager
 {
     public final static int NEW_TEXT_DOCUMENT = 1;
 
     protected String folder;
     protected FileAccess fileAccess;
+    protected Connection connection;
 
     /**
      * Constructs a DocumentManager object.
-     * 
+     *
      * @param connection
      *            The connection to a running OpenOffice service.
      * @param folder
@@ -42,15 +42,15 @@ public class DocumentManager extends BaseConnection
      */
     public DocumentManager(Connection connection, String folder) throws Exception
     {
-        super(connection);
         this.setFolder(folder);
 
+        this.connection = connection;
         this.fileAccess = new FileAccess(connection);
     }
 
     /**
      * Set the location where the documents will be handled.
-     * 
+     *
      * @param folder
      *            Full system path to the folder.
      */
@@ -61,7 +61,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Set the location where the documents will be handled.
-     * 
+     *
      * @return folder The location of the documents storage folder.
      */
     public String getFolder()
@@ -71,7 +71,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Creates the file from a input stream.
-     * 
+     *
      * @param file
      *            The file name plus extension.
      * @param inputStream
@@ -104,7 +104,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Get the document's raw content as a string. Handy for html documents.
-     * 
+     *
      * @param document
      *            The document from which to get the content. This document must
      *            be saved and available on the filesystem.
@@ -138,7 +138,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Open a new document.
-     * 
+     *
      * @param type
      *            The type of document. See the managers static properties for
      *            the available options.
@@ -157,7 +157,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Open an existing document.
-     * 
+     *
      * @param file
      *            The full file name plus extension.
      * @return a TextDocument object
@@ -180,7 +180,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Saves a document.
-     * 
+     *
      * @param document
      *            The BaseDocument object that needs saving.
      * @throws IOException
@@ -216,7 +216,7 @@ public class DocumentManager extends BaseConnection
     /**
      * Delete a document. This happens based on the document's name and
      * extension.
-     * 
+     *
      * @param document
      *            The document that needs deleting.
      * @throws CommandAbortedException
@@ -230,7 +230,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Closes the document.
-     * 
+     *
      * @param document
      *            The BaseDocument object that needs closing.
      * @throws CloseVetoException
@@ -256,7 +256,7 @@ public class DocumentManager extends BaseConnection
 
     /**
      * Check if a file already exists.
-     * 
+     *
      * @param file
      *            File name plus extension.
      * @return true if the file exists, returns false otherwise.

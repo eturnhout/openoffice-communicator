@@ -10,7 +10,7 @@ import com.sun.star.uno.Exception;
  *
  * @author Eelke van Turnhout
  */
-public class BaseDocument extends BaseConnection {
+public class BaseDocument {
     public final static String PROPERTY_OVERWRITE = "Overwrite";
     public final static String PROPERTY_FORMAT = "FilterName";
     public final static String PROPERTIES_AVAILABLE = PROPERTY_OVERWRITE + ", " + PROPERTY_FORMAT;
@@ -42,6 +42,8 @@ public class BaseDocument extends BaseConnection {
      */
     protected DocumentProperties properties;
 
+    protected Connection connection;
+
     /**
      * Construct a BaseDocument object.
      *
@@ -57,13 +59,13 @@ public class BaseDocument extends BaseConnection {
      */
     public BaseDocument(Connection connection, String folder, String file, DocumentProperties properties)
             throws Exception {
-        super(connection);
         this.setFolder(folder);
 
         if (file != null) {
             this.parseFile(file);
         }
 
+        this.connection = connection;
         this.properties = (properties != null) ? properties : new DocumentProperties();
     }
 
