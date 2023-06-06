@@ -10,6 +10,7 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.lang.XComponent;
 import com.sun.star.ucb.CommandAbortedException;
+import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
@@ -23,39 +24,37 @@ import com.sun.star.util.XCloseable;
  *
  * @author Eelke van Turnhout
  */
-public class DocumentManager
-{
+public class DocumentManager {
     public final static int NEW_TEXT_DOCUMENT = 1;
 
     protected String folder;
-    protected FileAccess fileAccess;
     protected Connection connection;
+    protected XSimpleFileAccess fileAccess;
 
     /**
      * Constructs a DocumentManager object.
      *
      * @param connection
-     *            The connection to a running OpenOffice service.
+     *                   The connection to a running OpenOffice service.
      * @param folder
-     *            The storage folder on the filesystem for the documents.
+     *                   The storage folder on the filesystem for the documents.
      * @throws Exception
      */
-    public DocumentManager(Connection connection, String folder) throws Exception
-    {
+    public DocumentManager(Connection connection, String folder) throws Exception {
         this.setFolder(folder);
 
         this.connection = connection;
-        this.fileAccess = new FileAccess(connection);
+        this.fileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                connection.getServiceFactory().createInstance("com.sun.star.ucb.SimpleFileAccess"));
     }
 
     /**
      * Set the location where the documents will be handled.
      *
      * @param folder
-     *            Full system path to the folder.
+     *               Full system path to the folder.
      */
-    public void setFolder(String folder)
-    {
+    public void setFolder(String folder) {
         this.folder = folder;
     }
 
@@ -64,8 +63,7 @@ public class DocumentManager
      *
      * @return folder The location of the documents storage folder.
      */
-    public String getFolder()
-    {
+    public String getFolder() {
         return this.folder;
     }
 
@@ -73,22 +71,22 @@ public class DocumentManager
      * Creates the file from a input stream.
      *
      * @param file
-     *            The file name plus extension.
+     *                    The file name plus extension.
      * @param inputStream
-     *            A file's input stream.
+     *                    A file's input stream.
      * @throws CommandAbortedException
      * @throws Exception
      * @throws java.io.IOException
      */
     @SuppressWarnings("unused")
-    public void createFromInputStream(String file, InputStream inputStream) throws CommandAbortedException, Exception, java.io.IOException
-    {
+    public void createFromInputStream(String file, InputStream inputStream)
+            throws CommandAbortedException, Exception, java.io.IOException {
         if (this.exists(file)) {
             throw new Exception("There's already a file called " + file + ".");
         }
 
         String fullPath = this.folder + file;
-        XOutputStream outputStream = (XOutputStream) fileAccess.getStream(fullPath).getOutputStream();
+        XOutputStream outputStream = (XOutputStream) this.fileAccess.openFileReadWrite(fullPath).getInputStream();
 
         byte[] bytes = new byte[128];
         int read = 0;
@@ -106,23 +104,24 @@ public class DocumentManager
      * Get the document's raw content as a string. Handy for html documents.
      *
      * @param document
-     *            The document from which to get the content. This document must
-     *            be saved and available on the filesystem.
+     *                 The document from which to get the content. This document
+     *                 must
+     *                 be saved and available on the filesystem.
      * @return the document's content in string format.
      * @throws CommandAbortedException
      * @throws Exception
      * @throws UnsupportedEncodingException
      */
     @SuppressWarnings("unused")
-    public String getRawContent(BaseDocument document) throws CommandAbortedException, Exception, UnsupportedEncodingException
-    {
+    public String getRawContent(BaseDocument document)
+            throws CommandAbortedException, Exception, UnsupportedEncodingException {
         if (!this.exists(document.getName() + document.getExtension())) {
             throw new Exception("No file called " + document.getName() + document.getExtension() + " found.");
         }
 
         String fullPath = document.getFolder() + document.getName() + document.getExtension();
 
-        XInputStream inputStream = (XInputStream) this.fileAccess.getStream(fullPath).getInputStream();
+        XInputStream inputStream = (XInputStream) this.fileAccess.openFileReadWrite(fullPath).getInputStream();
         StringBuffer buffer = new StringBuffer();
         byte[][] bytes = new byte[1024][];
         int read = 0;
@@ -140,14 +139,13 @@ public class DocumentManager
      * Open a new document.
      *
      * @param type
-     *            The type of document. See the managers static properties for
-     *            the available options.
+     *             The type of document. See the managers static properties for
+     *             the available options.
      * @return a new document, the kind depends on the type argument or null on
      *         failure.
      * @throws java.lang.Exception
      */
-    public BaseDocument openNew(int type) throws java.lang.Exception
-    {
+    public BaseDocument openNew(int type) throws java.lang.Exception {
         if (type == NEW_TEXT_DOCUMENT) {
             return new TextDocument(this.connection, this.folder, null, null);
         }
@@ -159,16 +157,16 @@ public class DocumentManager
      * Open an existing document.
      *
      * @param file
-     *            The full file name plus extension.
+     *             The full file name plus extension.
      * @return a TextDocument object
      * @throws java.lang.Exception
      */
-    public BaseDocument open(String file) throws java.lang.Exception
-    {
+    public BaseDocument open(String file) throws java.lang.Exception {
         BaseDocument baseDocument = new BaseDocument(this.connection, this.folder, file, null);
 
         if (!this.exists(baseDocument.getName() + baseDocument.getExtension())) {
-            throw new Exception("File with file name " + baseDocument.getName() + baseDocument.getExtension() + " does not exist.");
+            throw new Exception(
+                    "File with file name " + baseDocument.getName() + baseDocument.getExtension() + " does not exist.");
         }
 
         if (TextDocument.isValidExtension(baseDocument.getExtension())) {
@@ -182,11 +180,10 @@ public class DocumentManager
      * Saves a document.
      *
      * @param document
-     *            The BaseDocument object that needs saving.
+     *                 The BaseDocument object that needs saving.
      * @throws IOException
      */
-    public void save(BaseDocument document) throws IOException
-    {
+    public void save(BaseDocument document) throws IOException {
         XStorable storeable = null;
 
         if (document instanceof TextDocument) {
@@ -218,25 +215,23 @@ public class DocumentManager
      * extension.
      *
      * @param document
-     *            The document that needs deleting.
+     *                 The document that needs deleting.
      * @throws CommandAbortedException
      * @throws Exception
      */
-    public void delete(BaseDocument document) throws CommandAbortedException, Exception
-    {
+    public void delete(BaseDocument document) throws CommandAbortedException, Exception {
         String filePath = this.folder + document.getName() + document.getExtension();
-        this.fileAccess.delete(filePath);
+        this.fileAccess.kill(filePath);
     }
 
     /**
      * Closes the document.
      *
      * @param document
-     *            The BaseDocument object that needs closing.
+     *                 The BaseDocument object that needs closing.
      * @throws CloseVetoException
      */
-    public void close(BaseDocument document) throws CloseVetoException
-    {
+    public void close(BaseDocument document) throws CloseVetoException {
         XStorable storable = null;
 
         if (document instanceof TextDocument) {
@@ -258,19 +253,14 @@ public class DocumentManager
      * Check if a file already exists.
      *
      * @param file
-     *            File name plus extension.
+     *             File name plus extension.
      * @return true if the file exists, returns false otherwise.
      * @throws CommandAbortedException
      * @throws Exception
      */
-    public boolean exists(String file) throws CommandAbortedException, Exception
-    {
+    public boolean exists(String file) throws CommandAbortedException, Exception {
         String filePath = this.folder + file;
 
-        if (!this.fileAccess.exists(filePath)) {
-            return false;
-        }
-
-        return true;
+        return this.fileAccess.exists(filePath);
     }
 }
